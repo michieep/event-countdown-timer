@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eventopia 💫</title>
+<style>
+  /* Body & layout */
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .back-video{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    inset: 0;
+  }
+
+  /* Heading */
+  header h1 {
+    z-index: 1;
+    text-align: center;
+    font-size: 3rem;
+    margin-top: 60px;
+    margin-left: 65px;
+    color: rgb(241, 212, 222);
+  }
+  
+
+  /* Navbar */
+  nav {
+    text-align: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+  }
+
+  nav a {
+    display: inline-flex;
+    margin: 5px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(135deg, #e387c9, #a6c1ee);
+    transition: all 0.3s ease;
+  }
+  nav a:hover {
+    transform: scale(1.2);
+    background: linear-gradient(135deg, #ff9a9e, #8e44ad);
+    color: #fff;
+  }
+
+  /* Event section */
+  #event {
+    text-align: center;
+    margin-top: 30px;
+    padding: 0 10px;
+  }
+
+  .event-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  input, button {
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+
+  input {
+    width: 180px;
+    max-width: 100%;
+  }
+
+  input:focus {
+    outline: 2px solid #ff7eb3;
+    transform: scale(1.03);
+  }
+
+  button {
+    background: linear-gradient(135deg, #e387c9, #a6c1ee);
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  button:hover {
+    background: linear-gradient(135deg, #ff9a9e, #8e44ad);
+    transform: scale(1.05);
+  }
+
+  /* Countdown */
+  #countdown {
+    font-size: 2rem;
+    margin-top: 20px;
+    padding: 15px 20px;
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid #ff7eb3;
+    border-radius: 15px;
+    text-shadow: 2px 2px 10px #000;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  #countdown:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #ff7eb3;
+  }
+
+  /* Modal styles */
+  .modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.7);
+  }
+
+  .modal-content {
+    background-color: #222;
+    margin: 20% auto;
+    padding: 20px;
+    border-radius: 15px;
+    border: 3px solid #ff7eb3;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+    animation: pop 0.3s ease-in-out;
+    color: #fff;
+  }
+
+  @keyframes pop {
+    0% {transform: scale(0.7); opacity: 0;}
+    50% {transform: scale(1.05); opacity: 1;}
+    100% {transform: scale(1); opacity: 1;}
+  }
+
+  .close {
+    color: #fff;
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+  }
+  .close:hover {
+    color: #ff3cac;
+  }
+
+  /* Footer always at bottom */
+  footer {
+    margin-top: auto;
+    text-align:center;
+    padding:20px;
+    font-size:1.2rem;
+    background:transparent;
+    color:#e0b0ff;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 600px) {
+    header h1 { font-size: 2.5rem; margin-top: 40px; }
+    .event-container { flex-direction: column; gap: 15px; }
+    nav a { padding: 8px 12px; font-size: 0.9rem; }
+    #countdown { font-size: 1.5rem; padding: 10px 15px; }
+    footer { font-size: 1rem; padding: 15px; }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>EVENTOPIA 💫</h1>
+  <video class="back-video" autoplay loop muted>
+    <source src="video/video 4.mp4" type="video/mp4">
+  </video>
+  <audio controls autoplay loop hidden muted>
+    <source src="video/audio.mp3">
+  </audio>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="games.html">Games</a>
+  <a href="help.html">Help</a>
+  <a href="about.html">About</a>
+</nav>
+
+<section id="event">
+  <div class="event-container">
+    <input type="text" id="eventName" placeholder="Enter Event Name">
+    <button type="button" onclick="validateEventName()">OK</button>
+    <input type="datetime-local" id="eventDate">
+    <button type="button" onclick="startCountdown()">Start Countdown</button>
+  </div>
+  <div id="countdown">⏳ Waiting for your event...</div>
+</section>
+
+<!-- Modal -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p id="modalMessage"></p>
+  </div>
+</div>
+
+<footer>
+  © 2025 Eventopia | Designed with ❤️ by Ms. Michelle Phillips
+</footer>
+
+<script>
+let countdownInterval;
+
+function validateEventName() {
+  const inp = document.getElementById("eventName").value.trim();
+  if(inp === "") showModal("⚠️ Please enter event name");
+  else if(/^\d+$/.test(inp)) showModal("❌ Invalid or inappropriate input");
+  else showModal("✅ Input OK");
+}
+
+function showModal(message) {
+  document.getElementById("modalMessage").innerText = message;
+  document.getElementById("myModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+  if(event.target == document.getElementById("myModal")) closeModal();
+}
+
+function startCountdown() {
+  clearInterval(countdownInterval);
+
+  const inp = document.getElementById("eventName").value.trim();
+  if(inp === "" || /^\d+$/.test(inp)) {
+    showModal("⚠️ Enter valid event name first!");
+    return;
+  }
+
+  const eventDateInput = document.getElementById("eventDate").value;
+  if(!eventDateInput) {
+    showModal("⚠️ Please select a date!");
+    return;
+  }
+
+  const eventTime = new Date(eventDateInput).getTime();
+  const countdownElement = document.getElementById("countdown");
+
+  countdownInterval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = eventTime - now;
+
+    if(distance < 0) {
+      clearInterval(countdownInterval);
+      countdownElement.innerHTML = "🎉 Event Started!";
+      showModal(`🎉 Your event "${inp}" has started!`);
+      return;
+    }
+
+    const days = Math.floor(distance / (1000*60*60*24));
+    const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+    const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+    const seconds = Math.floor((distance % (1000*60)) / 1000);
+
+    // Flip effect
+    countdownElement.style.transform = "rotateX(90deg)";
+    setTimeout(() => {
+      countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      countdownElement.style.transform = "rotateX(0deg)";
+    }, 150);
+
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
