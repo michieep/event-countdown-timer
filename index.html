@@ -275,7 +275,7 @@ function startCountdown() {
       clearInterval(countdownInterval);
       countdownElement.innerHTML = "🎉 Event Started!";
       showModal(`🎉 Your event "${inp}" has started!`);
-       notifyUser(`Your event "${inp}" has started!`);
+       notifyUser(`Your event "${inp}" has ended!`);
       return;
     }
     function notifyUser(message) {
@@ -317,4 +317,5 @@ function startCountdown() {
 
 </body>
 </html>
+
 
