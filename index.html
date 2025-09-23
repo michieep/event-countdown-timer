@@ -192,7 +192,7 @@
     <source src="video/new.mp4" type="video/mp4">
   </video>
   <audio controls autoplay loop hidden >
-    <source src="video/audio new.mp3">
+    <source src="video/audio new.mp3" type="audio/mp3">
   </audio>
 </header>
 
@@ -212,6 +212,7 @@
   </div>
   <div id="countdown">⏳ Waiting for your event...</div>
 </section>
+
 
 <!-- Modal -->
 <div id="myModal" class="modal">
@@ -274,8 +275,29 @@ function startCountdown() {
       clearInterval(countdownInterval);
       countdownElement.innerHTML = "🎉 Event Started!";
       showModal(`🎉 Your event "${inp}" has started!`);
+       notifyUser(`Your event "${inp}" has started!`);
       return;
     }
+    function notifyUser(message) {
+  // Vibrate if supported
+  if ("vibrate" in navigator) {
+    navigator.vibrate([200, 100, 200]); // pattern: vibrate-pause-vibrate
+  }
+
+  // Desktop/mobile notification
+  if (Notification.permission === "granted") {
+    new Notification("⏰ Event Reminder", {
+      body: message,
+      icon: "https://cdn-icons-png.flaticon.com/512/1077/1077114.png" // optional icon
+    });
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+        new Notification("⏰ Event Reminder", { body: message });
+      }
+    });
+  }
+}
 
     const days = Math.floor(distance / (1000*60*60*24));
     const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
@@ -295,7 +317,4 @@ function startCountdown() {
 
 </body>
 </html>
-
-
-
 
